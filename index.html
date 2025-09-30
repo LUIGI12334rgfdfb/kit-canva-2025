@@ -105,15 +105,34 @@
   </section>
 
   <section class="price" id="acquista">
-    <h2>💰 Prezzo lancio speciale</h2>
-    <h3>Solo 14,90€</h3>
-    <p>Pagamento sicuro con PayPal o carta di credito. Ricevi il link per il download subito dopo l'acquisto.</p>
-    <a href="LINK_A_PAGAMENTO" class="cta-btn">Acquista e Scarica Ora</a>
-  </section>
+  <h2>💰 Prezzo lancio speciale</h2>
+  <h3>Solo 14,90€</h3>
+  <p>Pagamento sicuro con PayPal o carta di credito. Dopo l'acquisto riceverai subito il link per il download.</p>
 
-  <footer>
-    <p>© 2025 DigitalKitPro | <a href="#">Termini & Privacy</a></p>
-  </footer>
+  <!-- PayPal Buttons -->
+  <div id="paypal-button-container"></div>
+</section>
 
-</body>
-</html>
+<!-- Carica il SDK PayPal -->
+<script src="https://www.paypal.com/sdk/js?client-id=TUO_CLIENT_ID&currency=EUR"></script>
+
+<script>
+  paypal.Buttons({
+    createOrder: function(data, actions) {
+      return actions.order.create({
+        purchase_units: [{
+          amount: {
+            value: '14.90'
+          }
+        }]
+      });
+    },
+    onApprove: function(data, actions) {
+      return actions.order.capture().then(function(details) {
+        // Mostra un messaggio di conferma o reindirizza al link di download
+        alert('Grazie per il tuo acquisto, ' + details.payer.name.given_name + '!');
+        window.location.href = "https://TUO-LINK-DOWNLOAD.com"; // <-- Inserisci qui il link al file
+      });
+    }
+  }).render('#paypal-button-container');
+</script>
